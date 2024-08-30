@@ -10,13 +10,10 @@ ARG NODE_VERSION=lts
 # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && apt-get update -qqy \
-    && apt-get install -qqy gcc g++ make nodejs \
+    && apt-get install -qqy gcc g++ make gettext nodejs \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install pnpm via corepack
 RUN corepack enable \
     && corepack prepare pnpm@latest-9 --activate \
-    && pnpm config set --location=global registry "https://registry.npmmirror.com/" \
-    && mvn -v \
-    && node -v \
-    && pnpm -v
+    && pnpm config set --location=global registry "https://registry.npmmirror.com/"

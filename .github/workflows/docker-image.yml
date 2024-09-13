@@ -1,12 +1,14 @@
 name: Publish Docker image
 
 on:
+  workflow_dispatch:
   push:
     branches:
     - main
     - release/*    
     tags:
       - 'v*'
+      
 env:
   MAVEN_BASE_IMAGE: 3-eclipse-temurin-21
   NODE_VERSION: lts
@@ -104,4 +106,5 @@ jobs:
         build-args: |
           MAVEN_BASE_IMAGE=${{ env.MAVEN_BASE_IMAGE }}
           NODE_VERSION=${{ env.NODE_VERSION }}
+          MVND_VERSION=${{ env.MVND_VERSION }}
           

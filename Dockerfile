@@ -7,7 +7,7 @@ ARG NODE_VERSION=lts
 
 ENV MVND_HOME=/opt/mvnd
 ENV PATH="${MVND_HOME}/bin:${PATH}"
-ENV MVND_BINARY_URL=https://downloads.apache.org/maven/mvnd/${MAVEN_DAEMON_VERSION}/maven-mvnd-${MAVEN_DAEMON_VERSION}-linux-amd64.tar.gz
+ENV MVND_BINARY_URL=https://downloads.apache.org/maven/mvnd/${MVND_VERSION}/maven-mvnd-${MVND_VERSION}-linux-amd64.tar.gz
 
 USER root
 

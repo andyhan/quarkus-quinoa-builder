@@ -16,8 +16,9 @@ USER root
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && apt-get update -qqy \
     && apt-get install -qqy gcc g++ make gettext nodejs \    
-    && mkdir -p $MVND_HOME && curl -fL $MVND_BINARY_URL | tar zxv -C $MVND_HOME --strip-components=1 \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+    && mkdir -p /opt/mvnd && curl -fL $MVND_BINARY_URL | tar zxv -C /opt/mvnd --strip-components=1 \ 
+    && ln -s ${MVND_HOME}/bin/mvnd /usr/bin/mvnd \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/* 
 
 # Install pnpm via corepack
 RUN corepack enable \

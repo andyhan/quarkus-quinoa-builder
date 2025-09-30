@@ -21,7 +21,8 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* 
 
 # Install pnpm via corepack
-RUN corepack enable \
-    && corepack prepare pnpm@latest-9 --activate \
+RUN npm install --global corepack@latest \
+    && corepack enable \
+    && corepack prepare pnpm@latest-10 --activate \
     && pnpm config set --location=global registry "https://registry.npmmirror.com/"
     

@@ -23,6 +23,14 @@ jobs:
     permissions:
       packages: write
       contents: read
+    
+    strategy:
+      matrix:
+        maven-base_image_prefix: [maven:3-eclipse-temurin]
+        maven-java_version: [21, 25]
+    
+    env:
+      MAVEN_FULL_IMAGE: ${{ matrix.maven-base_image_prefix }}-${{ matrix.maven-java_version }}
       
     steps:
     - name: Check Out Repo 
@@ -83,15 +91,8 @@ jobs:
           docker.io/${{ github.repository }}
           ghcr.io/${{ github.repository }}
           ${{ secrets.GITEA_SERVER }}/${{ secrets.GITEA_REPOSITORY }}
-        flavor: |
-          latest=auto
-        # generate Docker tags based on the following events/attributes
         tags: |
-          type=schedule
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{major}}          
-          type=raw,value=latest
+          type=raw,value=jdk-${{ matrix.maven-java_version }}
           
     - name: Build and Push Versioned Docker Image
       id: build-and-push
@@ -104,7 +105,7 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
-          MAVEN_BASE_IMAGE=${{ env.MAVEN_BASE_IMAGE }}
+          MAVEN_BASE_IMAGE=${{ env.MAVEN_FULL_IMAGE }}
           NODE_VERSION=${{ env.NODE_VERSION }}
           MVND_VERSION=${{ env.MVND_VERSION }}
           

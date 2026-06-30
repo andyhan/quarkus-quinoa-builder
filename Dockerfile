@@ -3,7 +3,7 @@ ARG MAVEN_BASE_IMAGE=maven:3-eclipse-temurin-21
 FROM ${MAVEN_BASE_IMAGE}
 
 ARG NODE_VERSION=lts
-ARG MVND_VERSION=1.0.5
+ARG MVND_VERSION=1.0.6
 
 ENV MVND_HOME=/opt/mvnd
 ENV PATH="${MVND_HOME}/bin:${PATH}"
@@ -24,6 +24,6 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
 RUN npm install --global npm \
     && npm install --global corepack@latest \
     && corepack enable \
-    && corepack prepare pnpm@latest-10 --activate \
+    && corepack prepare pnpm@latest-11 --activate \
     && pnpm config set --location=global registry "https://registry.npmmirror.com/"
     

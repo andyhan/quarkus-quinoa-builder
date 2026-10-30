@@ -1,10 +1,9 @@
 ARG MAVEN_BASE_IMAGE=maven:3-eclipse-temurin-21
 
+FROM ${MAVEN_BASE_IMAGE}
+
 ARG NODE_VERSION=lts
 ARG MVND_VERSION=1.0.6
-ARG PNPM_VERSION=12
-
-FROM ${MAVEN_BASE_IMAGE}
 
 ENV MVND_HOME=/opt/mvnd
 ENV PATH="${MVND_HOME}/bin:${PATH}"
@@ -19,10 +18,12 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && apt-get install -qqy gcc g++ make gettext nodejs \    
     && mkdir -p /opt/mvnd && curl -fL $MVND_BINARY_URL | tar zxv -C /opt/mvnd --strip-components=1 \ 
     && ln -s ${MVND_HOME}/bin/mvnd /usr/bin/mvnd \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-    
-# Install pnpm
-COPY --from=ghcr.io/pnpm/pnpm:12 /opt/pnpm /opt/pnpm
-RUN for bin in pnpm pn pnpx pnx; do ln -s "/opt/pnpm/$bin" "/usr/local/bin/$bin"; done \
-    && npm install --global npm \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/* 
+
+# Install pnpm via corepack
+RUN npm install --global npm \
+    && npm install --global corepack@latest \
+    && corepack enable \
+    && corepack prepare pnpm@latest-12 --activate \
     && pnpm config set --location=global registry "https://registry.npmmirror.com/"
+    
